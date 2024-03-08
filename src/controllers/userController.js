@@ -15,9 +15,7 @@ const validateLogin = async (req, res) => {
     expiresIn: '7d',
     algorithm: 'HS256',
   };
-  
   const token = jwt.sign({ data: { email } }, secret, jwtConfig);
-  
   return res.status(200).json({ token });
 };
 
@@ -34,9 +32,7 @@ const insert = async (req, res) => {
   };
 
   const { email } = user;
-  
   const token = jwt.sign({ data: { email } }, secret, jwtConfig);
-  
   return res.status(201).json({ token });
 };
 
@@ -45,8 +41,17 @@ const getAll = async (_req, res) => {
   return res.status(200).json(users);
 };
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  const { user } = req;
+
+  const userResponse = await userService.getUserById(id, user);
+  return res.status(userResponse.status).json(userResponse.data);
+};
+
 module.exports = {
   validateLogin,
   insert,
   getAll,
+  getUserById,
 };

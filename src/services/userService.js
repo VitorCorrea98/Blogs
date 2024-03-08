@@ -38,8 +38,15 @@ const getAll = async () => {
 
 const findUserByEmailToken = async (email) => {
   const user = await User.findOne({ where: { email }, attributes: { exlcude: ['passoword'] } });
-
   return user;
+};
+
+const getUserById = async (id, foundUser) => {
+  const user = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
+  const checkUserId = foundUser.dataValues.id === Number(id);
+
+  if (!user || !checkUserId) return { status: 404, data: { message: 'User does not exist' } };
+  return { status: 200, data: user };
 };
 
 module.exports = {
@@ -48,4 +55,5 @@ module.exports = {
   insert,
   getAll,
   findUserByEmailToken,
+  getUserById,
 };

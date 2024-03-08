@@ -29,9 +29,8 @@ module.exports = async (req, res, next) => {
     const decoded = jwt.verify(token, secret);
     const user = await userService.findUserByEmailToken(decoded.data.email);
     
-    console.log({ user });
     if (!user) {
-      return res.status(401).json({ message: 'Erro ao procurar usuário do token.' });
+      return res.status(404).json({ message: 'User does not exist' });
     }
 
     req.user = user;
