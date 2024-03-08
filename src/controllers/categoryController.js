@@ -7,7 +7,7 @@ const insert = async (req, res) => {
   return res.status(status).json(data);
 };
 
-const getAll = async (req, res) => {
+const getAll = async (_req, res) => {
   const { status, data } = await categoryService.getAll();
   return res.status(status).json(data);
 };
