@@ -31,8 +31,21 @@ const insert = async (user) => {
   await User.create(user);
 };
 
+const getAll = async () => {
+  const users = await User.findAll({ attributes: { exclude: ['password'] } });
+  return users;
+};
+
+const findUserByEmailToken = async (email) => {
+  const user = await User.findOne({ where: { email }, attributes: { exlcude: ['passoword'] } });
+
+  return user;
+};
+
 module.exports = {
   findUserByEmail,
   validateLogin,
   insert,
+  getAll,
+  findUserByEmailToken,
 };

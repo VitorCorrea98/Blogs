@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { userService } = require('../services');
 
-const secret = process.env.JWT_SECRET || 'seusecretdetoken';
+const secret = process.env.JWT_SECRET || 'suaSenhaSecreta';
 
 const validateLogin = async (req, res) => {
   const login = req.body;
@@ -40,7 +40,13 @@ const insert = async (req, res) => {
   return res.status(201).json({ token });
 };
 
+const getAll = async (_req, res) => {
+  const users = await userService.getAll();
+  return res.status(200).json(users);
+};
+
 module.exports = {
   validateLogin,
   insert,
+  getAll,
 };
