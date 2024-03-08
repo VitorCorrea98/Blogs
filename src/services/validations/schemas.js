@@ -12,7 +12,12 @@ const userInsertValidation = Joi.object({
   image: Joi.string(),
 });
 
+const categoryValidation = Joi.object({
+  name: Joi.string().required(),
+});
+
 module.exports = {
   userValidate,
   userInsertValidation,
+  categoryValidation,
 };
