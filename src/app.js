@@ -1,6 +1,5 @@
 const express = require('express');
-const { userController } = require('./controllers');
-const validateJWT = require('./auth/validateJWT');
+const { userRouter, loginRouter } = require('./router');
 
 // ...
 
@@ -13,10 +12,8 @@ app.get('/', (_request, response) => {
 
 app.use(express.json());
 
-app.post('/login', userController.validateLogin);
-app.post('/user', userController.insert);
-app.get('/user', validateJWT, userController.getAll);
-app.get('/user/:id', validateJWT, userController.getUserById);
+app.use('/login', loginRouter);
+app.use('/user', userRouter);
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`
 module.exports = app;
