@@ -1,6 +1,5 @@
 const { blogPostValidation, blogUpdateValidation } = require('./schemas');
 const { Category, BlogPost } = require('../../models');
-const { postService } = require('..');
 
 const ValidatePostKeys = async (req, res, next) => {
   const post = req.body;
