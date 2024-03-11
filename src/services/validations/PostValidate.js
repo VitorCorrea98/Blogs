@@ -4,7 +4,7 @@ const { Category } = require('../../models');
 const ValidatePostKeys = async (req, res, next) => {
   const post = req.body;
   const { error } = blogPostValidation.validate(post);
-  if (error && (error.message.includes('title') || error.message.includes('content'))) {
+  if (error) {
     return res.status(400).json({ message: 'Some required fields are missing' });
   }
 

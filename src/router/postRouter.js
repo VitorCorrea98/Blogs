@@ -4,5 +4,6 @@ const { postController } = require('../controllers');
 const { ValidatePostKeys } = require('../services/validations/PostValidate');
 
 router.post('/', validateJWT, ValidatePostKeys, postController.insert);
+router.get('/', validateJWT, postController.getAll);
 
 module.exports = router;
