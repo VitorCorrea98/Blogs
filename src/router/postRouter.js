@@ -6,7 +6,8 @@ const { ValidatePostKeys } = require('../services/validations/PostValidate');
 router.put('/:id', validateJWT, postController.updatePost);
 router.post('/', validateJWT, ValidatePostKeys, postController.insert);
 router.get('/', validateJWT, postController.getAll);
-router.get('/:id', validateJWT, postController.getById);
 router.delete('/:id', validateJWT, postController.deletePost);
+router.get('/search', validateJWT, postController.findByQuery);
+router.get('/:id', validateJWT, postController.getById);
 
 module.exports = router;

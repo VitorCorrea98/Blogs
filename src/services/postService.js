@@ -2,6 +2,8 @@ const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, User, Category } = require('../models');
 const config = require('../config/config');
 
+const { Op } = Sequelize;
+
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
 
@@ -19,7 +21,6 @@ const insert = async (post, user) => {
   });
   return result;
 };
-
 const getAll = async () => {
   const allPosts = await BlogPost.findAll({
     include: [
@@ -29,7 +30,6 @@ const getAll = async () => {
   });
   return { status: 200, data: allPosts };
 };
-
 const getById = async (id) => {
   const post = await BlogPost.findOne({ 
     where: { id },
@@ -37,13 +37,18 @@ const getById = async (id) => {
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
       { model: Category, as: 'categories', through: { attributes: [] } },
     ] });
-
   if (!post) return { status: 404, data: { message: 'Post does not exist' } };
   return { status: 200, data: post };
 };
-
 const updatePost = async (id, post) => BlogPost.update(post, { where: { id } });
-
 const deletePost = async (id) => BlogPost.destroy({ where: { id } });
+const findByQuery = async (query) => {
+  const blogs = await BlogPost
+    .findAll({ where: { [Op.or]: [{ title: query }, { content: query }] }, 
+      include: [{ model: User, as: 'user' }, { model: Category, as: 'categories' }] });
+  const fixedBlogs = blogs.map((blog) => blog.dataValues);
+  console.log({ fixedBlogs });
+  return { status: 200, data: fixedBlogs };
+};
 
-module.exports = { insert, getAll, getById, updatePost, deletePost };
+module.exports = { insert, getAll, getById, updatePost, deletePost, findByQuery };
