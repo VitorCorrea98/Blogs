@@ -7,5 +7,6 @@ router.put('/:id', validateJWT, postController.updatePost);
 router.post('/', validateJWT, ValidatePostKeys, postController.insert);
 router.get('/', validateJWT, postController.getAll);
 router.get('/:id', validateJWT, postController.getById);
+router.delete('/:id', validateJWT, postController.deletePost);
 
 module.exports = router;

@@ -20,18 +20,24 @@ const ValidatePostKeys = async (req, res, next) => {
   next();
 };
 
+const validateUserIsSame = async (id, user) => {
+  const blogPost = await BlogPost.findByPk(id);
+  
+  if (!blogPost) return { status: 404, data: { message: 'Post does not exist' } };
+  const checkUser = user.dataValues.id === blogPost.dataValues.userId;
+  if (!checkUser) return { status: 401, data: { message: 'Unauthorized user' } };
+};
+
 const postValidateUpdate = async (post, id, user) => {
   const { error } = blogUpdateValidation.validate(post);
   if (error) return { status: 400, data: { message: 'Some required fields are missing' } };
 
-  const blogPost = await BlogPost.findByPk(id);
-  console.log({ blogPost, user });
-
-  const checkUser = user.dataValues.id === blogPost.dataValues.userId;
-  if (!checkUser) return { status: 401, data: { message: 'Unauthorized user' } };
+  const checkUser = await validateUserIsSame(id, user);
+  if (checkUser) return { status: checkUser.status, data: checkUser.data };
 };
 
 module.exports = {
   ValidatePostKeys,
   postValidateUpdate,
+  validateUserIsSame,
 };

@@ -1,5 +1,5 @@
 const { postService } = require('../services');
-const { postValidateUpdate } = require('../services/validations/PostValidate');
+const { postValidateUpdate, validateUserIsSame } = require('../services/validations/PostValidate');
 
 const insert = async (req, res) => {
   const post = req.body;
@@ -29,7 +29,6 @@ const updatePost = async (req, res) => {
   const { user } = req;
 
   const error = await postValidateUpdate(post, id, user);
-  console.log({ error });
   if (error) return res.status(error.status).json(error.data);
 
   await postService.updatePost(id, post);
@@ -37,9 +36,21 @@ const updatePost = async (req, res) => {
   return res.status(status).json(data);
 };
 
+const deletePost = async (req, res) => {
+  const { user } = req;
+  const { id } = req.params;
+
+  const error = await validateUserIsSame(id, user);
+  if (error) return res.status(error.status).json(error.data);
+
+  await postService.deletePost(id);
+  return res.status(204).end();
+};
+
 module.exports = {
   insert,
   getAll,
   getById,
   updatePost,
+  deletePost,
 };
