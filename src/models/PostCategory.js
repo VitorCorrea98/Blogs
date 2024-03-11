@@ -2,11 +2,13 @@ const PostCategoryModel = (sequelize, DataTypes) => {
   const PostCategory = sequelize.define("PostCategory", {
     postId: {
       type: DataTypes.INTEGER,
+      field: 'post_id',
       primaryKey: true,
     },
     categoryId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      field: 'category_id'
     }
   },
   {
