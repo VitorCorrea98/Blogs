@@ -28,13 +28,13 @@ module.exports = async (req, res, next) => {
     /* Através o método verify, podemos validar e decodificar o nosso JWT. */
     const decoded = jwt.verify(token, secret);
     const user = await userService.findUserByEmailToken(decoded.data.email);
+    console.log('OIIIII');
     
     if (!user) {
       return res.status(404).json({ message: 'User does not exist' });
     }
 
     req.user = user;
-
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Expired or invalid token' });

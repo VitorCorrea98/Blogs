@@ -1,10 +1,8 @@
 const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, User, Category } = require('../models');
-
 const config = require('../config/config');
 
 const env = process.env.NODE_ENV || 'development';
-// Ajustamos para usar a configuração correta para nosso ambiente
 const sequelize = new Sequelize(config[env]);
 
 const insert = async (post, user) => {
@@ -14,7 +12,6 @@ const insert = async (post, user) => {
 
     const newBlogPost = { title, content, userId: id };
     const newBlog = await BlogPost.create(newBlogPost, { transaction: t });
-
     await Promise.all(categoryIds.map(async (category) => PostCategory
       .create({ postId: newBlog.dataValues.id, categoryId: category }, { transaction: t })));
 
@@ -45,8 +42,6 @@ const getById = async (id) => {
   return { status: 200, data: post };
 };
 
-module.exports = {
-  insert,
-  getAll,
-  getById,
-};
+const updatePost = async (id, post) => BlogPost.update(post, { where: { id } });
+
+module.exports = { insert, getAll, getById, updatePost };

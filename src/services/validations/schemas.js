@@ -22,9 +22,19 @@ const blogPostValidation = Joi.object({
   categoryIds: Joi.array().items(Joi.number()),
 });
 
+const blogUpdateValidation = Joi.object({
+  title: Joi.string().min(1).required().messages({
+    'any.required': 'Some required fields are missing',
+  }),
+  content: Joi.string().min(1).required().messages({
+    'any.required': 'Some required fields are missing',
+  }),
+});
+
 module.exports = {
   userValidate,
   userInsertValidation,
   categoryValidation,
   blogPostValidation,
+  blogUpdateValidation,
 };

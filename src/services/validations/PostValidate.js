@@ -1,5 +1,6 @@
-const { blogPostValidation } = require('./schemas');
-const { Category } = require('../../models');
+const { blogPostValidation, blogUpdateValidation } = require('./schemas');
+const { Category, BlogPost } = require('../../models');
+const { postService } = require('..');
 
 const ValidatePostKeys = async (req, res, next) => {
   const post = req.body;
@@ -20,6 +21,18 @@ const ValidatePostKeys = async (req, res, next) => {
   next();
 };
 
+const postValidateUpdate = async (post, id, user) => {
+  const { error } = blogUpdateValidation.validate(post);
+  if (error) return { status: 400, data: { message: 'Some required fields are missing' } };
+
+  const blogPost = await BlogPost.findByPk(id);
+  console.log({ blogPost, user });
+
+  const checkUser = user.dataValues.id === blogPost.dataValues.userId;
+  if (!checkUser) return { status: 401, data: { message: 'Unauthorized user' } };
+};
+
 module.exports = {
   ValidatePostKeys,
+  postValidateUpdate,
 };
