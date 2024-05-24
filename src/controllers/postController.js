@@ -42,7 +42,6 @@ const findByQuery = async (req, res) => {
   }
   const { status, data } = await postService.findByQuery(q);
 
-  console.log({ data, q });
   if (data.length) return res.status(status).json(data);
   return res.status(status).json(data);
 };

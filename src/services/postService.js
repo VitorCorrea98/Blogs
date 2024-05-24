@@ -44,10 +44,11 @@ const updatePost = async (id, post) => BlogPost.update(post, { where: { id } });
 const deletePost = async (id) => BlogPost.destroy({ where: { id } });
 const findByQuery = async (query) => {
   const blogs = await BlogPost
-    .findAll({ where: { [Op.or]: [{ title: query }, { content: query }] }, 
-      include: [{ model: User, as: 'user' }, { model: Category, as: 'categories' }] });
+    .findAll({ where: { [Op.or]: [
+      { title: { [Op.like]: `%${query}%` } }, { content: { [Op.like]: `%${query}%` } }] }, 
+    include: [{ model: User, as: 'user' }, { model: Category, as: 'categories' }] });
+
   const fixedBlogs = blogs.map((blog) => blog.dataValues);
-  console.log({ fixedBlogs });
   return { status: 200, data: fixedBlogs };
 };
 
